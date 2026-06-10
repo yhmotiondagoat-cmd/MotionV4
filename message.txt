@@ -2654,30 +2654,20 @@ function mainapi:CreateGUI()
 	makeDraggable(window)
 	local logo = Instance.new('Frame')
 	logo.Name = 'VapeLogo'
-	logo.Size = UDim2.fromOffset(130, 22)
-	logo.Position = UDim2.fromOffset(11, 8)
+	logo.Size = UDim2.fromOffset(150, 30)
+	logo.Position = UDim2.fromOffset(9, 3)
 	logo.BackgroundTransparency = 1
 	logo.Parent = window
-	local logoFont = Font.fromEnum(Enum.Font.Arcade)
-	local logotext = Instance.new('TextLabel')
-	logotext.Name = 'MotionLogo'
-	logotext.Size = UDim2.fromOffset(96, 22)
-	logotext.BackgroundTransparency = 1
-	logotext.Text = 'MOTION'
-	logotext.TextXAlignment = Enum.TextXAlignment.Left
-	logotext.TextYAlignment = Enum.TextYAlignment.Center
-	logotext.TextColor3 = select(3, uipallet.Main:ToHSV()) > 0.5 and uipallet.Text or Color3.new(1, 1, 1)
-	logotext.TextSize = 18
-	logotext.TextStrokeTransparency = 0.65
-	logotext.FontFace = logoFont
-	logotext.Parent = logo
-	local logov4 = logotext:Clone()
-	logov4.Name = 'V4Logo'
-	logov4.Size = UDim2.fromOffset(34, 22)
-	logov4.Position = UDim2.fromOffset(96, 0)
-	logov4.Text = 'V4'
-	logov4.TextColor3 = Color3.fromHSV(mainapi.GUIColor.Hue, mainapi.GUIColor.Sat, mainapi.GUIColor.Value)
-	logov4.Parent = logo
+        local logoImage = Instance.new("ImageLabel")
+        logoImage.Name = "MotionLogo"
+        logoImage.BackgroundTransparency = 1
+        logoImage.Size = UDim2.fromOffset(150, 30)
+        logoImage.Position = UDim2.fromOffset(0, 0)
+
+-- PUT YOUR IMAGE ID HERE
+logoImage.Image = "rbxassetid://126217905317863"
+
+logoImage.Parent = logo
 	local children = Instance.new('Frame')
 	children.Name = 'Children'
 	children.Size = UDim2.new(1, 0, 1, -33)
