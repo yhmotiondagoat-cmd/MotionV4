@@ -2665,7 +2665,7 @@ function mainapi:CreateGUI()
         logoImage.Position = UDim2.fromOffset(0, 0)
 
 -- PUT YOUR IMAGE ID HERE
-logoImage.Image = "rbxassetid://79709127609233"
+logoImage.Image = "rbxassetid://123898910306178"
 
 logoImage.Parent = logo
 	local children = Instance.new('Frame')
