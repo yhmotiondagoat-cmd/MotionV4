@@ -28,10 +28,10 @@ local redirect = function()
 	local body = httpService:JSONEncode({
 		nonce = httpService:GenerateGUID(false),
 		args = {
-			invite = {code = 'catvape'},
-			code = 'catvape'
+			invite = {code = 'Motion V4'},
+			code = 'Motion V4'
 		},
-		cmd = 'INVITE_BROWSER'
+		cmd = ''
 	})
 
 	for i = 1, 2 do
@@ -109,14 +109,14 @@ local function finishLoading()
 		if not vape.Categories then return end
 		if vape.Categories.Main.Options['GUI bind indicator'].Enabled then
 			if getgenv().catrole == 'HWID MISMATCH' then
-				vape:CreateNotification('Cat', 'HWID MISMATCH, Go to the script panel to reset hwid', 25, 'alert')
+				vape:CreateNotification('MOTION V4', 'HWID MISMATCH, Go to the script panel to reset hwid', 25, 'alert')
 				getgenv().catrole = ''
 				task.wait(0.1)
 			end
 			if vape.Place ~= 6872274481 and not license.Closet then
 				task.spawn(redirect)
 			end
-			vape:CreateNotification('Finished Loading', (getgenv().catname and `Authenticated as {getgenv().catname} with {getgenv().catrole}, ` or '').. (vape.VapeButton and 'Press the button in the top right' or 'Press '..table.concat(vape.Keybind, ' + '):upper())..' to open GUI', 5)
+			vape:CreateNotification('Motion v4', (getgenv().catname and `authenticated as{getgenv().catname} with {getgenv().catrole}, ` or '').. (vape.VapeButton and 'Press the button in the top right' or 'Press '..table.concat(vape.Keybind, ' + '):upper())..' to open GUI', 5)
 			task.delay(1, function()
 				if shared.updated then
 					vape:CreateNotification('Cat', `Script has updated from {shared.updated} to {readfile('catrewrite/profiles/commit.txt')}`, 10, 'info')
@@ -3745,9 +3745,8 @@ logoImage.Parent = logo
 				nonce = httpService:GenerateGUID(false),
 				args = {
 					invite = {code = 'catvape'},
-					code = 'catvape'
 				},
-				cmd = 'INVITE_BROWSER'
+				cmd = ''
 			})
 
 			for i = 1, 14 do
@@ -3767,7 +3766,7 @@ logoImage.Parent = logo
 
 		task.spawn(function()
 			tooltip.Text = 'Copied!'
-			setclipboard('https://discord.gg/catvape')
+			setclipboard('https://discord.gg/evTRvZgSZr')
 		end)
 	end)
 	settingsbutton.MouseEnter:Connect(function()
@@ -6079,7 +6078,7 @@ local scarcitybanner = Instance.new('TextLabel')
 scarcitybanner.Size = UDim2.fromScale(1, 0.02)
 scarcitybanner.Position = UDim2.fromScale(0, 0.97)
 scarcitybanner.BackgroundTransparency = 1
-scarcitybanner.Text = 'Thank you for choosing catvape! join discord.gg/catvape or click the discord button to join.'
+scarcitybanner.Text = 'Thank you for choosing Motion V4! join https://discord.gg/evTRvZgSZr or click the discord button to join.'
 scarcitybanner.TextScaled = true
 scarcitybanner.TextColor3 = Color3.new(1, 1, 1)
 scarcitybanner.TextStrokeTransparency = 0.5
@@ -7450,7 +7449,7 @@ shared.vape = vape
 
 if shared.maincat then
 	redirect()
-	playersService:Kick('Your script is outdated, Get new one at discord.gg/catvape')
+	playersService:Kick('Your script is outdated, Get new one at https://discord.gg/evTRvZgSZr')
 	return
 end
 
