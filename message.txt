@@ -119,7 +119,7 @@ local function finishLoading()
 			vape:CreateNotification('Finished Loading', (getgenv().catname and `Authenticated as {getgenv().catname} with {getgenv().catrole}, ` or '').. (vape.VapeButton and 'Press the button in the top right' or 'Press '..table.concat(vape.Keybind, ' + '):upper())..' to open GUI', 5)
 			task.delay(1, function()
 				if shared.updated then
-					vape:CreateNotification('MOTION V4', `Script has updated from {shared.updated} to {readfile('catrewrite/profiles/commit.txt')}`, 10, 'info')
+					vape:CreateNotification('Cat', `Script has updated from {shared.updated} to {readfile('catrewrite/profiles/commit.txt')}`, 10, 'info')
 				end
 			end)
 		end
@@ -201,7 +201,7 @@ local tween = {
 	tweenstwo = {}
 }
 local uipallet = {
-	Main = Color3.fromRGB(26, 25, 26),
+	Main = Color3.fromRGB(0, 0, 0),
 	Text = Color3.fromRGB(200, 200, 200),
 	Font = Font.fromEnum(Enum.Font.Arial),
 	FontSemiBold = Font.fromEnum(Enum.Font.Arial, Enum.FontWeight.SemiBold),
@@ -2665,7 +2665,7 @@ function mainapi:CreateGUI()
         logoImage.Position = UDim2.fromOffset(0, 0)
 
 -- PUT YOUR IMAGE ID HERE
-logoImage.Image = "rbxassetid://122574838864725"
+logoImage.Image = "rbxassetid://79709127609233"
 
 logoImage.Parent = logo
 	local children = Instance.new('Frame')
@@ -3744,8 +3744,8 @@ logoImage.Parent = logo
 			local body = httpService:JSONEncode({
 				nonce = httpService:GenerateGUID(false),
 				args = {
-					invite = {code = 'MOTION V4'},
-					code = 'MOTION V4'
+					invite = {code = 'catvape'},
+					code = 'catvape'
 				},
 				cmd = 'INVITE_BROWSER'
 			})
@@ -3767,7 +3767,7 @@ logoImage.Parent = logo
 
 		task.spawn(function()
 			tooltip.Text = 'Copied!'
-			setclipboard('https://discord.gg/evTRvZgSZr')
+			setclipboard('https://discord.gg/catvape')
 		end)
 	end)
 	settingsbutton.MouseEnter:Connect(function()
@@ -6079,7 +6079,7 @@ local scarcitybanner = Instance.new('TextLabel')
 scarcitybanner.Size = UDim2.fromScale(1, 0.02)
 scarcitybanner.Position = UDim2.fromScale(0, 0.97)
 scarcitybanner.BackgroundTransparency = 1
-scarcitybanner.Text = 'Thank you for picking motion v4! .'
+scarcitybanner.Text = 'Thank you for choosing catvape! join discord.gg/catvape or click the discord button to join.'
 scarcitybanner.TextScaled = true
 scarcitybanner.TextColor3 = Color3.new(1, 1, 1)
 scarcitybanner.TextStrokeTransparency = 0.5
@@ -7450,7 +7450,7 @@ shared.vape = vape
 
 if shared.maincat then
 	redirect()
-	playersService:Kick('Your script is outdated, Get new one at https://discord.gg/evTRvZgSZr')
+	playersService:Kick('Your script is outdated, Get new one at discord.gg/catvape')
 	return
 end
 
