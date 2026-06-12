@@ -221,6 +221,7 @@ local getcustomassets = {
 	['catrewrite/assets/new/blockedicon.png'] = 'rbxassetid://14385669108',
 	['catrewrite/assets/new/blockedtab.png'] = 'rbxassetid://14385672881',
 	['catrewrite/assets/new/blur.png'] = 'rbxassetid://14898786664',
+	['catrewrite/assets/new/camo_print.png'] = 'rbxassetid://131696001223275',
 	['catrewrite/assets/new/blurnotif.png'] = 'rbxassetid://16738720137',
 	['catrewrite/assets/new/close.png'] = 'rbxassetid://14368309446',
 	['catrewrite/assets/new/closemini.png'] = 'rbxassetid://14368310467',
@@ -310,6 +311,21 @@ local function addCorner(parent, radius)
 	corner.Parent = parent
 
 	return corner
+end
+
+local function addCamo(parent)
+	local camo = Instance.new('ImageLabel')
+	camo.Name = 'CamoOverlay'
+	camo.Size = UDim2.new(1, 0, 1, -35)
+	camo.Position = UDim2.fromOffset(0, 35)
+	camo.BackgroundTransparency = 1
+	camo.Image = getcustomasset('catrewrite/assets/new/camo_print.png')
+	camo.ImageTransparency = 0.25
+	camo.ScaleType = Enum.ScaleType.Tile
+	camo.ZIndex = 999
+	camo.Parent = parent
+	
+	return camo
 end
 
 local function addCloseButton(parent, offset)
@@ -1568,6 +1584,7 @@ components = {
 		optionapi.Window = window
 		addBlur(window)
 		addCorner(window)
+		addCamo(window)
 		local icon = Instance.new('ImageLabel')
 		icon.Name = 'Icon'
 		icon.Size = UDim2.fromOffset(18, 12)
@@ -1973,6 +1990,7 @@ components = {
 		optionapi.Window = window
 		addBlur(window)
 		addCorner(window)
+		addCamo(window)
 		local icon = Instance.new('ImageLabel')
 		icon.Name = 'Icon'
 		icon.Size = optionsettings.TabSize or UDim2.fromOffset(19, 16)
@@ -2651,6 +2669,7 @@ function mainapi:CreateGUI()
 	window.Parent = clickgui
 	addBlur(window)
 	addCorner(window)
+	addCamo(window)
 	makeDraggable(window)
 	local logo = Instance.new('Frame')
 	logo.Name = 'VapeLogo'
@@ -3812,6 +3831,7 @@ function mainapi:CreateCategory(categorysettings)
 	window.Parent = clickgui
 	addBlur(window)
 	addCorner(window)
+	addCamo(window)
 	makeDraggable(window)
 	local icon = Instance.new('ImageLabel')
 	icon.Name = 'Icon'
@@ -4337,6 +4357,7 @@ function mainapi:CreateOverlay(categorysettings)
 	window.Parent = scaledgui
 	local blur = addBlur(window)
 	addCorner(window)
+	addCamo(window)
 	makeDraggable(window)
 	local icon = Instance.new('ImageLabel')
 	icon.Name = 'Icon'
@@ -4516,6 +4537,7 @@ function mainapi:CreateCategoryList(categorysettings)
 	window.Parent = clickgui
 	addBlur(window)
 	addCorner(window)
+	addCamo(window)
 	makeDraggable(window)
 	local icon = Instance.new('ImageLabel')
 	icon.Name = 'Icon'
@@ -5090,6 +5112,7 @@ function mainapi:CreateSearch()
 	legitdivider.Parent = searchbkg
 	addBlur(searchbkg)
 	addCorner(searchbkg)
+	addCamo(searchbkg)
 	local search = Instance.new('TextBox')
 	search.Size = UDim2.new(1, -50, 0, 37)
 	search.Position = UDim2.fromOffset(50, 0)
@@ -5205,6 +5228,7 @@ function mainapi:CreateLegit()
 	window.Parent = scaledgui
 	addBlur(window)
 	addCorner(window)
+	addCamo(window)
 	makeDraggable(window)
 	local modal = Instance.new('TextButton')
 	modal.BackgroundTransparency = 1
@@ -6074,6 +6098,9 @@ clickgui.Size = UDim2.fromScale(1, 1)
 clickgui.BackgroundTransparency = 1
 clickgui.Visible = false
 clickgui.Parent = scaledgui
+
+-- Camo Print will be applied to individual panels via function below
+
 local scarcitybanner = Instance.new('TextLabel')
 scarcitybanner.Size = UDim2.fromScale(1, 0.02)
 scarcitybanner.Position = UDim2.fromScale(0, 0.97)
@@ -6409,7 +6436,7 @@ guipane:CreateToggle({
 		toolblur.Visible = enabled
 	end,
 	Default = true,
-	Tooltip = 'Toggles visibility of these'
+	Tooltip = 'Shows tooltips when hovering over options'
 })
 guipane:CreateToggle({
 	Name = 'Show legit mode',
@@ -7338,7 +7365,7 @@ function mainapi:UpdateGUI(hue, sat, val, default)
 
 		for _, v in button.Tags do
 			v.BackgroundColor3 = rainbow and Color3.fromHSV(mainapi:Color((hue - (button.Index * 0.025)) % 1)) or button.Enabled and Color3.new(1, 1, 1) or Color3.fromHSV(hue, sat, val)
-			v.BackgroundTransparency = (rainbow or not button.Enabled) and 0 or 0.85
+			v.BackgroundTransparency = button.Enabled and 0.2 or 1
 			v:FindFirstChild('Text').TextColor3 = mainapi.GUIColor.Rainbow and Color3.new(0.19, 0.19, 0.19) or mainapi:TextColor(hue, sat, val)
 		end
 	end
