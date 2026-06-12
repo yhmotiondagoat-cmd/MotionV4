@@ -116,7 +116,7 @@ local function finishLoading()
 			if vape.Place ~= 6872274481 and not license.Closet then
 				task.spawn(redirect)
 			end
-			vape:CreateNotification('Motion v4', (getgenv().catname and `authenticated as{getgenv().catname} with {getgenv().catrole}, ` or '').. (vape.VapeButton and 'Press the button in the top right' or 'Press '..table.concat(vape.Keybind, ' + '):upper())..' to open GUI', 5)
+			vape:CreateNotification('Motion v4', (getgenv().catname and `authenticated as {getgenv().catname} with {getgenv().catrole}, ` or '').. (vape.VapeButton and 'Press the button in the top right' or 'Press '..table.concat(vape.Keybind, ' + '):upper())..' to open GUI', 5)
 			task.delay(1, function()
 				if shared.updated then
 					vape:CreateNotification('Cat', `Script has updated from {shared.updated} to {readfile('catrewrite/profiles/commit.txt')}`, 10, 'info')
@@ -202,7 +202,7 @@ local tween = {
 }
 local uipallet = {
 	Main = Color3.fromRGB(0, 0, 0),
-	Text = Color3.fromRGB(200, 200, 200),
+	Text = Color3.fromRGB(255,255,255),
 	Font = Font.fromEnum(Enum.Font.Arial),
 	FontSemiBold = Font.fromEnum(Enum.Font.Arial, Enum.FontWeight.SemiBold),
 	Tween = TweenInfo.new(0.16, Enum.EasingStyle.Linear)
@@ -2665,7 +2665,7 @@ function mainapi:CreateGUI()
         logoImage.Position = UDim2.fromOffset(0, 0)
 
 -- PUT YOUR IMAGE ID HERE
-logoImage.Image = "rbxassetid://123898910306178"
+logoImage.Image = "rbxassetid://75644866213300"
 
 logoImage.Parent = logo
 	local children = Instance.new('Frame')
