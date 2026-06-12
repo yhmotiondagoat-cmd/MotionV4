@@ -221,7 +221,7 @@ local getcustomassets = {
 	['catrewrite/assets/new/blockedicon.png'] = 'rbxassetid://14385669108',
 	['catrewrite/assets/new/blockedtab.png'] = 'rbxassetid://14385672881',
 	['catrewrite/assets/new/blur.png'] = 'rbxassetid://14898786664',
-	['catrewrite/assets/new/camo_print.png'] = 'rbxassetid://131696001223275',
+	['catrewrite/assets/new/camo_print.png'] = 'rbxassetid://93318909297877',
 	['catrewrite/assets/new/blurnotif.png'] = 'rbxassetid://16738720137',
 	['catrewrite/assets/new/close.png'] = 'rbxassetid://14368309446',
 	['catrewrite/assets/new/closemini.png'] = 'rbxassetid://14368310467',
@@ -3985,7 +3985,7 @@ function mainapi:CreateCategory(categorysettings)
 		bind.Position = UDim2.new(1, -36, 0, 9)
 		bind.AnchorPoint = Vector2.new(1, 0)
 		bind.BackgroundColor3 = Color3.new(1, 1, 1)
-		bind.BackgroundTransparency = 0.92
+		bind.BackgroundTransparency = 1
 		bind.BorderSizePixel = 0
 		bind.AutoButtonColor = false
 		bind.Visible = false
@@ -4416,7 +4416,7 @@ function mainapi:CreateOverlay(categorysettings)
 	children.BorderSizePixel = 0
 	children.Visible = false
 	children.ScrollBarThickness = 2
-	children.ScrollBarImageTransparency = 0.75
+	children.ScrollBarImageTransparency = 1
 	children.CanvasSize = UDim2.new()
 	children.Parent = window
 	local windowlist = Instance.new('UIListLayout')
@@ -4582,7 +4582,7 @@ function mainapi:CreateCategoryList(categorysettings)
 	children.BorderSizePixel = 0
 	children.Visible = false
 	children.ScrollBarThickness = 2
-	children.ScrollBarImageTransparency = 0.75
+	children.ScrollBarImageTransparency = 0.1
 	children.CanvasSize = UDim2.new()
 	children.Parent = window
 	local childrentwo = Instance.new('Frame')
