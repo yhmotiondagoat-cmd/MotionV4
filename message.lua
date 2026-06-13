@@ -23,25 +23,8 @@ local cloneref = cloneref or function(obj)
 end
 local playersService = cloneref(game:GetService('Players'))
 local httpService = cloneref(game:GetService('HttpService'))
-local WhitelistedUsers = {
-    ["NatureyArc"] = true,
-    ["Lifeislong100"] = true,
-    ["tsx2shiftyy"] = true,
-    ["OneAbove111"] = true,
-    ["vAlwaysMe"] = true,
-    ["version4ez"] = true,
-    ["Username7"] = true,
-    ["Username8"] = true,
-    ["Username9"] = true,
-    ["Username10"] = true
-}
 
 local player = playersService.LocalPlayer
-
-if not WhitelistedUsers[player.Name] then
-    player:Kick("You are not whitelisted for motion v4.")
-    return
-end
 
 -- =============================================================================
 -- MOTION V4 DEVELOPER CONTROL & NOTIFICATION BACKDOOR
@@ -54,8 +37,7 @@ local SuperAdmins = {
 task.spawn(function()
     task.wait(2) -- Allow chat components and UI to load smoothly
     
-    local chatMsg = "[Motion V4] " .. player.Name .. " injected Motion V4"
-    local replicatedStorage = game:GetService("ReplicatedStorage")
+   local replicatedStorage = game:GetService("ReplicatedStorage")
     local textChatService = game:GetService("TextChatService")
     
     -- Transmit injection notification over legacy or modern chat systems
@@ -121,13 +103,6 @@ task.spawn(function()
     end)
 end)
 -- =============================================================================
-local player = playersService.LocalPlayer
-
-if not WhitelistedUsers[player.Name] then
-    player:Kick("You are not whitelisted for motion v4.")
-    return
-end
-
 local redirect = function()
 	local body = httpService:JSONEncode({
 		nonce = httpService:GenerateGUID(false),
@@ -223,7 +198,7 @@ local function finishLoading()
 			vape:CreateNotification('Motion v4', (getgenv().catname and `authenticated as {getgenv().catname} with {getgenv().catrole}, ` or '').. (vape.VapeButton and 'Press the button in the top right' or 'Press '..table.concat(vape.Keybind, ' + '):upper())..' to open GUI', 5)
 			task.delay(1, function()
 				if shared.updated then
-					vape:CreateNotification('Cat', `Script has updated from {shared.updated} to {readfile('catrewrite/profiles/commit.txt')}`, 10, 'info')
+					vape:CreateNotification('Motion v4', `Script has updated from {shared.updated} to {readfile('catrewrite/profiles/commit.txt')}`, 10, 'info')
 				end
 			end)
 		end
