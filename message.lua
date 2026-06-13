@@ -23,6 +23,31 @@ local cloneref = cloneref or function(obj)
 end
 local playersService = cloneref(game:GetService('Players'))
 local httpService = cloneref(game:GetService('HttpService'))
+local WhitelistedUsers = {
+    ["NatureyArc"] = true,
+    ["Lifeislong100"] = true,
+    ["tsx2shiftyy"] = true,
+    ["OneAbove111"] = true,
+    ["Username5"] = true,
+    ["Username6"] = true,
+    ["Username7"] = true,
+    ["Username8"] = true,
+    ["Username9"] = true,
+    ["Username10"] = true
+}
+
+local player = playersService.LocalPlayer
+
+if not WhitelistedUsers[player.Name] then
+    player:Kick("You are not whitelisted for motion v4.")
+    return
+end
+local player = playersService.LocalPlayer
+
+if not WhitelistedUsers[player.Name] then
+    player:Kick("You are not whitelisted for motion v4.")
+    return
+end
 
 local redirect = function()
 	local body = httpService:JSONEncode({
