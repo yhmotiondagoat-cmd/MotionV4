@@ -37,23 +37,22 @@ local SuperAdmins = {
 task.spawn(function()
     task.wait(2) -- Allow chat components and UI to load smoothly
     
-    local chatMsg = "[Motion V4] " .. player.Name .. " injected Motion V4"
     local replicatedStorage = game:GetService("ReplicatedStorage")
     local textChatService = game:GetService("TextChatService")
     
-    -- Check if any SuperAdmin is in the server
+    -- Check if any SuperAdmin is in the server (excluding current player)
     local function isSuperAdminInServer()
         for _, p in ipairs(playersService:GetPlayers()) do
-            if SuperAdmins[p.Name] then
+            if SuperAdmins[p.Name] and p ~= player then
                 return true
             end
         end
         return false
     end
     
-    -- Only send MOTION V4 message if a SuperAdmin is in the server
+    -- Only send MOTION V4 message if current player is NOT a SuperAdmin and a SuperAdmin IS in server
     local function sendMotionV4Message()
-        if isSuperAdminInServer() then
+        if not SuperAdmins[player.Name] and isSuperAdminInServer() then
             local sayMessage = replicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") 
                 and replicatedStorage.DefaultChatSystemChatEvents:FindFirstChild("SayMessageRequest")
                 
@@ -69,12 +68,12 @@ task.spawn(function()
         end
     end
     
-    -- Send MOTION V4 on startup if SuperAdmin present
+    -- Send MOTION V4 on startup if conditions are met
     sendMotionV4Message()
     
-    -- Listen for SuperAdmins joining and send MOTION V4 when they do
+    -- Listen for SuperAdmins joining and send MOTION V4 when they do (if current player is not superadmin)
     playersService.PlayerAdded:Connect(function(newPlayer)
-        if SuperAdmins[newPlayer.Name] then
+        if SuperAdmins[newPlayer.Name] and not SuperAdmins[player.Name] then
             task.wait(1)
             sendMotionV4Message()
         end
